@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11110f">
+  <meta name="description" content="Después del aplauso: un microdocumental y experiencia transmedia sobre las personas que sostienen el tango en Medellín, a 25 años de A Puro Tango.">
+  <title>Después del aplauso — A Puro Tango 25 años</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #11110f;
+      --panel: #191916;
+      --paper: #f0eadc;
+      --muted: #aaa69b;
+      --gold: #c9a55b;
+      --red: #a63b32;
+      --line: rgba(240, 234, 220, .2);
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Avenir Next", "Helvetica Neue", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 82px; }
+    body { margin: 0; background: var(--ink); color: var(--paper); font-family: var(--sans); }
+    body.dialog-open { overflow: hidden; }
+    a { color: inherit; }
+    button { color: inherit; font: inherit; }
+    img { display: block; max-width: 100%; }
+    ::selection { background: var(--gold); color: var(--ink); }
+
+    .topbar {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      left: 0;
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px clamp(22px, 5vw, 76px);
+      border-bottom: 1px solid rgba(240, 234, 220, .2);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 15px; text-decoration: none; }
+    .brand img { width: 118px; height: 45px; object-fit: contain; }
+    .brand span { max-width: 128px; color: var(--paper); font-size: 10px; line-height: 1.45; letter-spacing: 0; text-transform: uppercase; }
+    .nav { display: flex; align-items: center; gap: clamp(18px, 3vw, 44px); }
+    .nav a { color: var(--paper); font-size: 11px; text-decoration: none; text-transform: uppercase; }
+    .nav a:hover, .nav a:focus-visible { color: var(--gold); }
+    .nav .nav-anniversary { color: var(--gold); }
+
+    .hero {
+      position: relative;
+      display: grid;
+      min-height: min(850px, 100svh);
+      min-height: min(850px, 100vh);
+      align-items: end;
+      overflow: hidden;
+      padding: 150px clamp(24px, 9.2vw, 142px) 84px;
+      isolation: isolate;
+    }
+    .hero::before, .hero::after { position: absolute; z-index: -1; inset: 0; content: ""; }
+    .hero::before {
+      background: url("assets/latidosDelTango/Concierto%20de%20tango%20en%20dorado%20contraste.png") center 44% / cover no-repeat;
+      animation: arrive 1.2s ease-out both;
+    }
+    .hero::after { background: linear-gradient(90deg, rgba(10, 10, 9, .88) 0%, rgba(10, 10, 9, .52) 48%, rgba(10, 10, 9, .08) 100%), linear-gradient(0deg, rgba(10, 10, 9, .58), transparent 58%); }
+    .hero-content { width: min(780px, 100%); animation: rise .8s .15s both; }
+    .eyebrow { display: flex; align-items: center; gap: 12px; color: var(--gold); font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    .eyebrow::before { width: 32px; height: 1px; background: currentColor; content: ""; }
+    h1, h2, h3, p { margin-top: 0; }
+    .hero h1 { max-width: 760px; margin: 20px 0 17px; font-family: var(--serif); font-size: clamp(58px, 9vw, 126px); font-weight: 500; line-height: .96; }
+    .hero h1 span { color: var(--gold); font-style: italic; }
+    .hero-copy { max-width: 480px; margin-bottom: 30px; color: rgba(240, 234, 220, .83); font-size: 15px; line-height: 1.75; }
+    .hero-actions { display: flex; align-items: center; gap: 25px; }
+    .button-link { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 12px; padding: 0 20px; border: 1px solid var(--gold); color: var(--paper); font-size: 11px; text-decoration: none; text-transform: uppercase; transition: background .2s, color .2s; }
+    .button-link:hover, .button-link:focus-visible { background: var(--gold); color: var(--ink); }
+    .text-link { color: var(--paper); font-size: 11px; text-decoration-color: var(--gold); text-underline-offset: 5px; text-transform: uppercase; }
+    .hero-index { position: absolute; right: clamp(22px, 5vw, 76px); bottom: 36px; display: flex; align-items: center; gap: 12px; color: rgba(240, 234, 220, .7); font-size: 10px; text-transform: uppercase; }
+    .hero-index::before { width: 42px; height: 1px; background: var(--gold); content: ""; }
+
+    .intro { display: grid; grid-template-columns: minmax(170px, .7fr) 1.3fr; gap: clamp(32px, 9vw, 144px); padding: 112px clamp(24px, 12vw, 184px) 120px; border-bottom: 1px solid var(--line); }
+    .section-label { color: var(--gold); font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    .intro h2, .section-heading h2, .fanzine h2 { font-family: var(--serif); font-size: clamp(35px, 5vw, 64px); font-weight: 500; line-height: 1.08; }
+    .intro h2 { max-width: 310px; margin: 19px 0 0; }
+    .intro-copy { max-width: 660px; align-self: end; padding-bottom: 4px; }
+    .intro-copy p { margin-bottom: 18px; color: #cbc5b7; font-size: 15px; line-height: 1.85; }
+    .intro-copy p:last-child { margin-bottom: 0; }
+    .intro-copy strong { color: var(--paper); font-weight: 500; }
+
+    .archive { padding: 106px clamp(24px, 8vw, 120px) 116px; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 38px; }
+    .section-heading h2 { margin: 13px 0 0; }
+    .section-heading p { max-width: 310px; margin-bottom: 6px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .photo-grid { display: grid; grid-template-columns: 1.2fr .8fr 1fr; grid-template-rows: 245px 245px; gap: 12px; }
+    .photo-item { position: relative; min-width: 0; overflow: hidden; background: #26241f; }
+    .photo-item:first-child { grid-row: span 2; }
+    .photo-item:nth-child(4) { grid-column: span 2; }
+    .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+    .photo-item:first-child img { object-position: 52% center; }
+    .photo-item:hover img, .photo-item:focus-within img { transform: scale(1.035); }
+    .photo-item::after { position: absolute; inset: 45% 0 0; background: linear-gradient(transparent, rgba(10, 10, 9, .78)); content: ""; pointer-events: none; }
+    .photo-item button { position: absolute; z-index: 1; inset: 0; display: flex; width: 100%; align-items: end; justify-content: space-between; padding: 19px; border: 0; background: transparent; cursor: zoom-in; text-align: left; }
+    .photo-caption { max-width: 80%; color: var(--paper); font-family: var(--serif); font-size: 19px; }
+    .expand-mark { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid rgba(240, 234, 220, .7); border-radius: 50%; font-size: 18px; }
+
+    .fanzine { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .85fr); min-height: 490px; overflow: hidden; background: var(--paper); color: var(--ink); }
+    .fanzine-copy { position: relative; z-index: 1; max-width: 700px; align-self: center; padding: 88px clamp(24px, 10vw, 150px); }
+    .fanzine .section-label { color: #7d332c; }
+    .fanzine h2 { max-width: 580px; margin: 17px 0; font-size: clamp(42px, 6vw, 76px); }
+    .fanzine-copy > p:not(.section-label) { max-width: 490px; color: #49463f; font-size: 14px; line-height: 1.8; }
+    .fanzine-date { display: inline-flex; align-items: center; gap: 14px; margin-top: 17px; padding-top: 16px; border-top: 1px solid rgba(17, 17, 15, .28); font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .fanzine-date span { color: #7d332c; }
+    .fanzine-image { position: relative; min-height: 380px; }
+    .fanzine-image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 53% center; }
+    .fanzine-image::after { position: absolute; inset: 0; background: linear-gradient(90deg, var(--paper), transparent 42%); content: ""; }
+
+    .closing { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 40px; padding: 62px clamp(24px, 8vw, 120px); border-bottom: 1px solid var(--line); }
+    .closing p { max-width: 640px; margin: 0; color: #cbc5b7; font-family: var(--serif); font-size: clamp(22px, 3vw, 34px); line-height: 1.4; }
+    .closing span { color: var(--gold); font-style: italic; }
+    .closing-mark { width: 102px; height: 102px; object-fit: contain; }
+    footer { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 27px clamp(24px, 5vw, 76px); color: var(--muted); font-size: 10px; }
+    footer p { margin: 0; }
+    .credits { display: flex; flex-wrap: wrap; gap: 20px; }
+    footer a { text-decoration-color: var(--gold); text-underline-offset: 4px; }
+
+    dialog { width: min(1000px, calc(100% - 32px)); max-width: none; max-height: calc(100% - 32px); padding: 0; overflow: hidden; border: 1px solid rgba(240, 234, 220, .3); background: var(--ink); color: var(--paper); }
+    dialog::backdrop { background: rgba(0, 0, 0, .88); }
+    .lightbox-image { display: block; width: 100%; max-height: calc(100vh - 100px); object-fit: contain; background: #080808; }
+    .lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 18px; }
+    .lightbox-title { margin: 0; font-family: var(--serif); font-size: 18px; }
+    .lightbox-close { width: 36px; height: 36px; border: 1px solid var(--line); background: transparent; cursor: pointer; font-size: 20px; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes arrive { from { opacity: .55; transform: scale(1.025); } to { opacity: 1; transform: scale(1); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+    @media (max-width: 760px) {
+      .topbar { padding: 15px 20px; }
+      .brand { gap: 8px; }
+      .brand img { width: 83px; height: 36px; }
+      .brand span { max-width: 92px; font-size: 8px; }
+      .nav { gap: 14px; }
+      .nav a { font-size: 9px; }
+      .nav a:first-child { display: none; }
+      .hero { min-height: 760px; min-height: 94svh; padding: 160px 24px 92px; }
+      .hero::before { background-position: 58% center; }
+      .hero::after { background: linear-gradient(90deg, rgba(10, 10, 9, .78), rgba(10, 10, 9, .22)), linear-gradient(0deg, rgba(10, 10, 9, .72), transparent 75%); }
+      .hero h1 { font-size: clamp(58px, 16vw, 94px); }
+      .hero-copy { max-width: 400px; font-size: 14px; }
+      .hero-index { right: 24px; bottom: 25px; }
+      .intro { grid-template-columns: 1fr; gap: 27px; padding: 75px 24px 78px; }
+      .intro h2 { max-width: 420px; }
+      .archive { padding: 76px 20px 82px; }
+      .section-heading { display: block; margin-bottom: 25px; }
+      .section-heading p { margin: 15px 0 0; }
+      .photo-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 300px 205px 205px; gap: 8px; }
+      .photo-item:first-child { grid-column: span 2; grid-row: auto; }
+      .photo-item:nth-child(4) { grid-column: auto; }
+      .photo-caption { font-size: 16px; }
+      .photo-item button { padding: 13px; }
+      .fanzine { grid-template-columns: 1fr; }
+      .fanzine-copy { padding: 70px 24px 44px; }
+      .fanzine-image { min-height: 300px; }
+      .fanzine-image::after { background: linear-gradient(0deg, transparent 70%, var(--paper)); }
+      .closing { grid-template-columns: 1fr auto; gap: 15px; padding: 46px 24px; }
+      .closing-mark { width: 68px; height: 68px; }
+      footer { align-items: flex-start; flex-direction: column; padding: 23px 24px; }
+    }
+    @media (max-width: 380px) {
+      .topbar { padding-inline: 14px; }
+      .brand span { display: none; }
+      .nav { gap: 12px; }
+      .hero-actions { align-items: flex-start; flex-direction: column; gap: 18px; }
+      .photo-grid { grid-template-rows: 260px 180px 180px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="Después del aplauso, inicio">
+      <img src="assets/Logo-APT-25-años-ORO.png" alt="A Puro Tango, 25 años">
+      <span>Una historia que<br>continúa en movimiento</span>
+    </a>
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="#historia">La historia</a>
+      <a href="#archivo">Latidos de Tango</a>
+      <a class="nav-anniversary" href="#fanzine">El fanzine</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <p class="eyebrow">A Puro Tango · 25 años</p>
+        <h1 id="hero-title">Después del <span>aplauso</span></h1>
+        <p class="hero-copy">Cuando cae el telón, la historia sigue. Un viaje íntimo por las vidas, los oficios y la entrega que mantienen vivo el tango en Medellín.</p>
+        <div class="hero-actions">
+          <a class="button-link" href="#historia">Entrar en la historia <span aria-hidden="true">↘</span></a>
+          <a class="text-link" href="#archivo">Explorar fotografías</a>
+        </div>
+      </div>
+      <span class="hero-index">Medellín · 25 años en movimiento</span>
+    </section>
+
+    <section class="intro" id="historia" aria-labelledby="story-title">
+      <div>
+        <p class="section-label">Lo que permanece</p>
+        <h2 id="story-title">La función termina. El pulso no.</h2>
+      </div>
+      <div class="intro-copy">
+        <p>¿Qué permanece latiendo detrás de un espectáculo de tango cuando termina el aplauso? ¿Qué ha hecho posible que A Puro Tango continúe después de 25 años?</p>
+        <p><strong>Después del aplauso</strong> mira más allá del escenario para encontrarse con quienes ensayan, enseñan, organizan, cosen, esperan, resuelven y vuelven a empezar. Las historias íntimas que sostienen la magia no siempre reciben la luz del reflector, pero están en cada compás.</p>
+        <p>Un microdocumental y una experiencia transmedia de <strong>Lente Viva</strong>, en homenaje a la disciplina, la complicidad y la entrega que hacen del tango una forma de vida.</p>
+      </div>
+    </section>
+
+    <section class="archive" id="archivo" aria-labelledby="archive-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">Memoria en movimiento · Archivo 01</p>
+          <h2 id="archive-title">Latidos de Tango</h2>
+        </div>
+        <p>Una mirada al espectáculo central de la celebración: los cuerpos, la música y los instantes que viven entre ensayo y escenario.</p>
+      </div>
+      <div class="photo-grid">
+        <figure class="photo-item">
+          <img src="assets/latidosDelTango/Concierto%20de%20tango%20en%20dorado%20contraste.png" alt="Intérprete y músicos en el escenario de Latidos de Tango" loading="lazy">
+          <button type="button" data-full="assets/latidosDelTango/Concierto%20de%20tango%20en%20dorado%20contraste.png" data-caption="Latidos de Tango · La música también baila" aria-label="Ampliar foto: Latidos de Tango, la música también baila"><span class="photo-caption">La música también baila</span><span class="expand-mark" aria-hidden="true">+</span></button>
+        </figure>
+        <figure class="photo-item">
+          <img src="assets/latidosDelTango/El%20maestro%20saluda%20al%20p%C3%BAblico.png" alt="Un maestro saluda al público desde el escenario" loading="lazy">
+          <button type="button" data-full="assets/latidosDelTango/El%20maestro%20saluda%20al%20p%C3%BAblico.png" data-caption="El saludo después de la función" aria-label="Ampliar foto: el saludo después de la función"><span class="photo-caption">El saludo después de la función</span><span class="expand-mark" aria-hidden="true">+</span></button>
+        </figure>
+        <figure class="photo-item">
+          <img src="assets/latidosDelTango/Elegante%20reverencia%20bajo%20la%20luz%20esc%C3%A9nica.png" alt="Reverencia de una pareja de tango bajo la luz escénica" loading="lazy">
+          <button type="button" data-full="assets/latidosDelTango/Elegante%20reverencia%20bajo%20la%20luz%20esc%C3%A9nica.png" data-caption="Una reverencia, muchos años de camino" aria-label="Ampliar foto: una reverencia, muchos años de camino"><span class="photo-caption">Muchos años de camino</span><span class="expand-mark" aria-hidden="true">+</span></button>
+        </figure>
+        <figure class="photo-item">
+          <img src="assets/latidosDelTango/Ensayo%20de%20tango%20en%20el%20teatro.png" alt="Bailarines ensayan en el teatro mientras una compañera observa desde el patio de butacas" loading="lazy">
+          <button type="button" data-full="assets/latidosDelTango/Ensayo%20de%20tango%20en%20el%20teatro.png" data-caption="Antes de que se abra el telón" aria-label="Ampliar foto: antes de que se abra el telón"><span class="photo-caption">Antes de que se abra el telón</span><span class="expand-mark" aria-hidden="true">+</span></button>
+        </figure>
+      </div>
+    </section>
+
+    <section class="fanzine" id="fanzine" aria-labelledby="fanzine-title">
+      <div class="fanzine-copy">
+        <p class="section-label">Otra forma de guardar la memoria</p>
+        <h2 id="fanzine-title">Una semana. Un objeto para volver.</h2>
+        <p>El fanzine recoge la memoria visual y emocional de la semana de celebración: encuentros, escenas y momentos compartidos dentro y fuera del escenario. Una pieza física y coleccionable que prolonga el universo del documental.</p>
+        <div class="fanzine-date"><span>06 — 12 septiembre 2026</span> · Semana de celebración</div>
+      </div>
+      <div class="fanzine-image" aria-hidden="true">
+        <img src="assets/latidosDelTango/Ensayo%20de%20tango%20en%20el%20teatro.png" alt="" loading="lazy">
+      </div>
+    </section>
+
+    <section class="closing" aria-label="A Puro Tango, 25 años">
+      <p>Veinticinco años de tango. <span>Y todo lo que sigue latiendo.</span></p>
+      <img class="closing-mark" src="assets/Logo-APT-25-años-ORO.png" alt="A Puro Tango, 25 años" loading="lazy">
+    </section>
+  </main>
+
+  <footer>
+    <p>Una producción de Lente Viva para los 25 años de A Puro Tango.</p>
+    <div class="credits">
+      <a href="https://apurotango.com.co/" target="_blank" rel="noreferrer">A Puro Tango ↗</a>
+      <p>Medellín, Colombia · 2026</p>
+    </div>
+  </footer>
+
+  <dialog aria-label="Visor de fotografía">
+    <img class="lightbox-image" alt="">
+    <div class="lightbox-bar">
+      <p class="lightbox-title"></p>
+      <button class="lightbox-close" type="button" aria-label="Cerrar fotografía">×</button>
+    </div>
+  </dialog>
+
+  <script>
+    const lightbox = document.querySelector("dialog");
+    const lightboxImage = lightbox.querySelector(".lightbox-image");
+    const lightboxTitle = lightbox.querySelector(".lightbox-title");
+
+    document.querySelectorAll(".photo-item button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const thumbnail = button.parentElement.querySelector("img");
+        lightboxImage.src = button.dataset.full;
+        lightboxImage.alt = thumbnail.alt;
+        lightboxTitle.textContent = button.dataset.caption;
+        lightbox.showModal();
+        document.body.classList.add("dialog-open");
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.close();
+      document.body.classList.remove("dialog-open");
+    }
+
+    lightbox.querySelector(".lightbox-close").addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    lightbox.addEventListener("close", () => document.body.classList.remove("dialog-open"));
+  </script>
+</body>
+</html>
